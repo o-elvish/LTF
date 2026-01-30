@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Evaluación de Presentación</title>
   <style>
+    /* Mismos colores de tu versión anterior */
     :root {
       --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
       --card-bg: #ffffff;
@@ -15,6 +16,7 @@
       --accent-green: #10b981;
       --accent-red: #ef4444;
       --accent-blue: #3b82f6;
+      --accent-gold: #f59e0b; /* Nuevo para estrellas */
       --border-color: #e2e8f0;
       --input-focus-shadow: rgba(99, 102, 241, 0.25);
       --radius: 16px;
@@ -49,56 +51,57 @@
     p.intro { text-align: center; color: var(--text-muted); margin-bottom: 40px; }
 
     .section-header {
-      display: flex;
-      align-items: center;
-      margin-top: 40px;
-      margin-bottom: 25px;
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 10px;
+      display: flex; align-items: center; margin-top: 40px; margin-bottom: 25px;
+      border-bottom: 2px solid var(--border-color); padding-bottom: 10px;
     }
-
     .section-badge {
       background: var(--primary); color: white; font-weight: bold;
       padding: 6px 12px; border-radius: 50px; margin-right: 15px; font-size: 0.9rem;
     }
-
     .section-title { font-size: 1.25rem; font-weight: 700; }
 
-    label.question-label {
-      display: block; font-weight: 600; margin-bottom: 8px;
-      color: var(--text-main); font-size: 1.05rem;
-    }
+    label.question-label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-main); font-size: 1.05rem; }
+    .helper-text { display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; margin-top: -4px; }
 
-    .helper-text {
-      display: block; font-size: 0.9rem; color: var(--text-muted);
-      margin-bottom: 12px; margin-top: -4px;
-    }
-
-    input[type="text"], textarea {
+    /* ESTILOS DEL DROPDOWN (SELECT) */
+    select, input[type="text"], textarea {
       width: 100%; padding: 14px; border: 2px solid var(--border-color);
       border-radius: 12px; font-size: 1rem; background-color: #f8fafc; margin-bottom: 25px;
+      appearance: none; /* Quita estilo por defecto */
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1em;
     }
-
-    input:focus, textarea:focus {
+    select:focus, textarea:focus {
       border-color: var(--primary); background-color: #fff;
       box-shadow: 0 0 0 4px var(--input-focus-shadow);
     }
 
-    .scale-container { display: flex; gap: 10px; margin-bottom: 30px; }
-    .scale-option { flex: 1; position: relative; }
-    .scale-option input[type="radio"] { opacity: 0; position: absolute; height: 100%; width: 100%; cursor: pointer; z-index: 2; }
-
-    .scale-label {
-      display: flex; justify-content: center; align-items: center; height: 50px;
-      background: #f1f5f9; border: 2px solid var(--border-color); border-radius: 10px;
-      font-weight: bold; color: var(--text-muted); transition: all 0.2s;
+    /* ESTILOS DE LAS ESTRELLAS */
+    .star-rating {
+      display: flex;
+      flex-direction: row-reverse; /* Invertimos para usar el selector ~ */
+      justify-content: flex-end; /* Alineamos a la izquierda */
+      gap: 5px;
+      margin-bottom: 30px;
+    }
+    .star-rating input { display: none; } /* Ocultar radio buttons */
+    
+    .star-rating label {
+      font-size: 2.5rem; /* Tamaño estrella */
+      color: #e2e8f0;    /* Gris apagado */
+      cursor: pointer;
+      transition: color 0.2s;
+      line-height: 1;
     }
 
-    .scale-option input:checked + .scale-label {
-      background: var(--primary); border-color: var(--primary); color: white;
-      transform: translateY(-2px); box-shadow: 0 4px 6px -1px var(--input-focus-shadow);
-    }
+    /* Lógica de color: Al marcar uno, se iluminan él y sus hermanos siguientes (que en HTML son los anteriores por row-reverse) */
+    .star-rating input:checked ~ label { color: var(--accent-gold); } 
+    .star-rating label:hover,
+    .star-rating label:hover ~ label { color: #fcd34d; } /* Hover más claro */
 
+    /* KSS y Botones */
     .kss-box textarea { border-left-width: 5px; }
     .kss-keep textarea { border-left-color: var(--accent-green); }
     .kss-stop textarea { border-left-color: var(--accent-red); }
@@ -112,7 +115,6 @@
       box-shadow: 0 10px 20px -5px var(--input-focus-shadow);
       transition: all 0.3s; margin-top: 30px;
     }
-
     #success-message { display: none; text-align: center; padding: 20px 0; }
     .success-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
   </style>
@@ -122,12 +124,14 @@
   <div class="card">
     <div id="form-content">
       <h1>🚀 Feedback de Presentación</h1>
-      <p class="intro">Tu retroalimentación ayuda a mejorar. ¡Gracias por participar!</p>
+      <p class="intro">Tu retroalimentación ayuda a mejorar. ¡Gracias!</p>
 
       <form id="feedback-form" action="https://script.google.com/macros/s/AKfycbyzrFXeQhZotVqtGUqwPt3QJXBCjRklp7ms4Mka0Wg9dKsR2wPjLp9xB8m8mw8a3aumgw/exec" method="POST">
         
-        <label for="clave" class="question-label">🔑 ¿Cuál es la clave del ponente?</label>
-        <input type="text" id="clave" name="clave" placeholder="Ejemplo: bio2026" required>
+        <label for="clave" class="question-label">🔑 Selecciona al Ponente</label>
+        <select id="clave" name="clave" required>
+          <option value="" disabled selected>Cargando lista...</option>
+          </select>
 
         <div class="section-header">
           <div class="section-badge">01</div>
@@ -135,33 +139,32 @@
         </div>
         
         <label class="question-label">🎨 Uso de Color y Contraste</label>
-        <span class="helper-text">¿Facilitaron la lectura o fueron distractores?</span>
-        <div class="scale-container">
-          <div class="scale-option"><input type="radio" name="color" value="1" required><div class="scale-label">1</div></div>
-          <div class="scale-option"><input type="radio" name="color" value="2"><div class="scale-label">2</div></div>
-          <div class="scale-option"><input type="radio" name="color" value="3"><div class="scale-label">3</div></div>
-          <div class="scale-option"><input type="radio" name="color" value="4"><div class="scale-label">4</div></div>
-          <div class="scale-option"><input type="radio" name="color" value="5"><div class="scale-label">5</div></div>
+        <span class="helper-text">¿Facilitaron la lectura?</span>
+        <div class="star-rating">
+          <input type="radio" id="col5" name="color" value="5" required><label for="col5">★</label>
+          <input type="radio" id="col4" name="color" value="4"><label for="col4">★</label>
+          <input type="radio" id="col3" name="color" value="3"><label for="col3">★</label>
+          <input type="radio" id="col2" name="color" value="2"><label for="col2">★</label>
+          <input type="radio" id="col1" name="color" value="1"><label for="col1">★</label>
         </div>
 
         <label class="question-label">📐 Equilibrio y Legibilidad</label>
-        <span class="helper-text">¿Jerarquía clara y cantidad de texto adecuada? (1=Caótico, 5=Perfecto)</span>
-        <div class="scale-container">
-          <div class="scale-option"><input type="radio" name="legibilidad" value="1" required><div class="scale-label">1</div></div>
-          <div class="scale-option"><input type="radio" name="legibilidad" value="2"><div class="scale-label">2</div></div>
-          <div class="scale-option"><input type="radio" name="legibilidad" value="3"><div class="scale-label">3</div></div>
-          <div class="scale-option"><input type="radio" name="legibilidad" value="4"><div class="scale-label">4</div></div>
-          <div class="scale-option"><input type="radio" name="legibilidad" value="5"><div class="scale-label">5</div></div>
+        <span class="helper-text">Organización del contenido</span>
+        <div class="star-rating">
+          <input type="radio" id="leg5" name="legibilidad" value="5" required><label for="leg5">★</label>
+          <input type="radio" id="leg4" name="legibilidad" value="4"><label for="leg4">★</label>
+          <input type="radio" id="leg3" name="legibilidad" value="3"><label for="leg3">★</label>
+          <input type="radio" id="leg2" name="legibilidad" value="2"><label for="leg2">★</label>
+          <input type="radio" id="leg1" name="legibilidad" value="1"><label for="leg1">★</label>
         </div>
 
-        <label class="question-label">🖼️ Calidad de Gráficos e Imágenes</label>
-        <span class="helper-text">¿Eran nítidos y aportaban valor al tema?</span>
-        <div class="scale-container">
-          <div class="scale-option"><input type="radio" name="graficos" value="1" required><div class="scale-label">1</div></div>
-          <div class="scale-option"><input type="radio" name="graficos" value="2"><div class="scale-label">2</div></div>
-          <div class="scale-option"><input type="radio" name="graficos" value="3"><div class="scale-label">3</div></div>
-          <div class="scale-option"><input type="radio" name="graficos" value="4"><div class="scale-label">4</div></div>
-          <div class="scale-option"><input type="radio" name="graficos" value="5"><div class="scale-label">5</div></div>
+        <label class="question-label">🖼️ Calidad de Gráficos</label>
+        <div class="star-rating">
+          <input type="radio" id="gra5" name="graficos" value="5" required><label for="gra5">★</label>
+          <input type="radio" id="gra4" name="graficos" value="4"><label for="gra4">★</label>
+          <input type="radio" id="gra3" name="graficos" value="3"><label for="gra3">★</label>
+          <input type="radio" id="gra2" name="graficos" value="2"><label for="gra2">★</label>
+          <input type="radio" id="gra1" name="graficos" value="1"><label for="gra1">★</label>
         </div>
 
         <div class="section-header">
@@ -170,31 +173,30 @@
         </div>
 
         <label class="question-label">🎤 Dominio y Seguridad</label>
-        <div class="scale-container">
-          <div class="scale-option"><input type="radio" name="dominio" value="1" required><div class="scale-label">1</div></div>
-          <div class="scale-option"><input type="radio" name="dominio" value="2"><div class="scale-label">2</div></div>
-          <div class="scale-option"><input type="radio" name="dominio" value="3"><div class="scale-label">3</div></div>
-          <div class="scale-option"><input type="radio" name="dominio" value="4"><div class="scale-label">4</div></div>
-          <div class="scale-option"><input type="radio" name="dominio" value="5"><div class="scale-label">5</div></div>
+        <div class="star-rating">
+          <input type="radio" id="dom5" name="dominio" value="5" required><label for="dom5">★</label>
+          <input type="radio" id="dom4" name="dominio" value="4"><label for="dom4">★</label>
+          <input type="radio" id="dom3" name="dominio" value="3"><label for="dom3">★</label>
+          <input type="radio" id="dom2" name="dominio" value="2"><label for="dom2">★</label>
+          <input type="radio" id="dom1" name="dominio" value="1"><label for="dom1">★</label>
         </div>
 
         <label class="question-label">🗣️ Claridad y Explicación</label>
-        <div class="scale-container">
-          <div class="scale-option"><input type="radio" name="claridad" value="1" required><div class="scale-label">1</div></div>
-          <div class="scale-option"><input type="radio" name="claridad" value="2"><div class="scale-label">2</div></div>
-          <div class="scale-option"><input type="radio" name="claridad" value="3"><div class="scale-label">3</div></div>
-          <div class="scale-option"><input type="radio" name="claridad" value="4"><div class="scale-label">4</div></div>
-          <div class="scale-option"><input type="radio" name="claridad" value="5"><div class="scale-label">5</div></div>
+        <div class="star-rating">
+          <input type="radio" id="cla5" name="claridad" value="5" required><label for="cla5">★</label>
+          <input type="radio" id="cla4" name="claridad" value="4"><label for="cla4">★</label>
+          <input type="radio" id="cla3" name="claridad" value="3"><label for="cla3">★</label>
+          <input type="radio" id="cla2" name="claridad" value="2"><label for="cla2">★</label>
+          <input type="radio" id="cla1" name="claridad" value="1"><label for="cla1">★</label>
         </div>
 
         <label class="question-label">💎 Calidad del Contenido</label>
-        <span class="helper-text">¿La información fue valiosa y bien estructurada?</span>
-        <div class="scale-container">
-          <div class="scale-option"><input type="radio" name="contenido" value="1" required><div class="scale-label">1</div></div>
-          <div class="scale-option"><input type="radio" name="contenido" value="2"><div class="scale-label">2</div></div>
-          <div class="scale-option"><input type="radio" name="contenido" value="3"><div class="scale-label">3</div></div>
-          <div class="scale-option"><input type="radio" name="contenido" value="4"><div class="scale-label">4</div></div>
-          <div class="scale-option"><input type="radio" name="contenido" value="5"><div class="scale-label">5</div></div>
+        <div class="star-rating">
+          <input type="radio" id="con5" name="contenido" value="5" required><label for="con5">★</label>
+          <input type="radio" id="con4" name="contenido" value="4"><label for="con4">★</label>
+          <input type="radio" id="con3" name="contenido" value="3"><label for="con3">★</label>
+          <input type="radio" id="con2" name="contenido" value="2"><label for="con2">★</label>
+          <input type="radio" id="con1" name="contenido" value="1"><label for="con1">★</label>
         </div>
 
         <div class="section-header">
@@ -219,10 +221,9 @@
 
         <div class="section-header">
           <div class="section-badge" style="background: var(--text-muted);">+</div>
-          <div class="section-title">Reporte de Errores y Comentarios</div>
+          <div class="section-title">Comentarios Finales</div>
         </div>
-        <label class="question-label">⚠️ Notas adicionales (Opcional)</label>
-        <textarea name="errores" rows="3" placeholder="Ej: Diapo 4 tiene un error de dedo..."></textarea>
+        <textarea name="errores" rows="3" placeholder="Reporte de errores o notas extra..."></textarea>
 
         <button type="submit" id="submit-btn" class="submit-btn">Enviar Evaluación 🚀</button>
       </form>
@@ -231,7 +232,7 @@
     <div id="success-message">
       <span class="success-icon">🎉</span>
       <h2>¡Evaluación Enviada!</h2>
-      <p>Tu feedback ha sido procesado correctamente. ¡Gracias por ayudar al ponente!</p>
+      <p>Tu feedback ha sido procesado correctamente.</p>
       <button onclick="location.reload()" class="submit-btn" style="background: var(--text-main); width: auto; padding: 12px 30px; font-size: 1rem;">Evaluar a otro ponente</button>
     </div>
   </div>
@@ -241,7 +242,38 @@
     const btn = document.getElementById('submit-btn');
     const formContent = document.getElementById('form-content');
     const successMessage = document.getElementById('success-message');
+    const selectPonente = document.getElementById('clave');
 
+    // 1. CARGAR LISTA DE PONENTES (Requiere que tu Script tenga doGet)
+    // Si tu script no devuelve datos, puedes descomentar la parte manual abajo.
+    window.onload = function() {
+       const SCRIPT_URL = form.action; 
+       
+       fetch(SCRIPT_URL + "?action=getSpeakers") 
+         .then(res => res.json())
+         .then(data => {
+            selectPonente.innerHTML = '<option value="" disabled selected>Selecciona una opción</option>';
+            data.forEach(item => {
+               // Asume que 'item' es el nombre o clave
+               const option = document.createElement('option');
+               option.value = item;
+               option.innerText = item;
+               selectPonente.appendChild(option);
+            });
+         })
+         .catch(err => {
+            console.log("No se pudo cargar la lista automática. Usando respaldo manual.");
+            // ⚠️ SI NO JALA AUTOMÁTICO, USA ESTO MANUALMENTE:
+            selectPonente.innerHTML = `
+               <option value="" disabled selected>Selecciona...</option>
+               <option value="Ponente 1">Ponente 1</option>
+               <option value="Ponente 2">Ponente 2</option>
+               <option value="Ponente 3">Ponente 3</option>
+            `;
+         });
+    };
+
+    // 2. ENVIAR FORMULARIO
     form.addEventListener('submit', e => {
       e.preventDefault();
       btn.disabled = true;
