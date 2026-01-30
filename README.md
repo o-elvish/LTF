@@ -1,7 +1,7 @@
 <br />
 <div align="center">
-  <h1 align="center">RECURSOS LAB</h1>
-  <p align="center">Herramientas de evaluación y gestión de Quizz</p>
+  <h1 align="center">RECURSOS LAB</h1>#
+  #  <p align="center">Herramientas de evaluación y gestión de Quizz</p>
 </div>
 
 ---
