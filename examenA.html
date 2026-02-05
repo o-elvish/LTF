@@ -188,7 +188,7 @@
 
         try {
             await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
-            document.querySelector('.card').innerHTML = "<h2>¡Enviado!</h2><p>Tus respuestas del Examen A han sido registradas. El profesor recibirá el reporte.</p>";
+            document.querySelector('.card').innerHTML = "<h2>¡Enviado!</h2><p>Tus respuestas del Examen han sido registradas.</p>";
         } catch (e) {
             alert("Error al enviar. Intenta de nuevo.");
             btn.disabled = false; btn.innerText = "Reintentar";
